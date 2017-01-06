@@ -1,13 +1,14 @@
 # 对抗式生成网络
 
 ## 背景介绍
-本章我们介绍对抗式生成网络，也称为Generative Adversarial Network(GAN) \[[1](#参考文献)\]。对抗式生成网络是生成模型 (generative model) 的一种，可以用非监督学习的办法来学习输入数据的分布，从而能达到产生和输入数据拥有同样概率分布的人造数据。这样的学习能力可以帮助机器完成图片自动生成、图像去噪、缺失图像补全和图像超分辨生成等工作。 
+
+本章我们介绍对抗式生成网络 Generative Adversarial Network, [GAN][gan]。对抗式生成网络是生成模型 (generative model) 的一种，可以用非监督学习的办法来学习输入数据的分布，从而能达到产生和输入数据拥有同样概率分布的人造数据。这样的学习能力可以帮助机器完成图片自动生成、图像去噪、缺失图像补全和图像超分辨生成等工作。
 
 现在大部分利用深度学习成功的例子都是在监督学习的条件下，把高维数据映射到一种低维空间表示（representation）里来进行分类（可参见前面几章的介绍）。这种方法也叫判别模型（discriminative model），它直接对条件概率P(y|x)建模。像我们的前八章，都是判别模型。但用这种方法学到的表示一般只是对那一种目标任务有效果，而不能很好的转移到别的任务。同时监督学习的训练需要大量标记好的数据，很多时候不是很容易得到。
 
 生成模型背后的基本想法是，如果一个模型它能够生成和真实数据非常相近的数据，那么很可能它就学到了对于这种数据的一种很有效的表示。生成模型另一些实际用途包括，图像去噪，缺失图像补全，图像超分辨生成等等。在标记数据不够的时候，还可以用生成模型生成的数据来预训练模型。
 
-近年来有一些有趣的图片生成模型，一种是变分自编码器（variational autoencoder）\[[3](#参考文献)\]，它是在概率图模型（probabilistic graphical model）的框架下面搭建了一个生成模型，对数据有完整的概率描述（即对P(x)进行建模），训练时是通过调节参数来最大化数据的概率。用这种方法产生的图片，虽然所对应的概率高，但很多时候看起来都比较模糊。为了解决这个问题，人们又提出了本章所要介绍的另一种生成模型，对抗式生成网络。
+近年来有一些有趣的图片生成模型，一种是变分自编码器 variational autoencoder, [VA][va]，它是在概率图模型（probabilistic graphical model）的框架下面搭建了一个生成模型，对数据有完整的概率描述（即对P(x)进行建模），训练时是通过调节参数来最大化数据的概率。用这种方法产生的图片，虽然所对应的概率高，但很多时候看起来都比较模糊。为了解决这个问题，人们又提出了本章所要介绍的另一种生成模型，对抗式生成网络。
 
 在本章里，我们展对抗式生产网络的细节，以及如何用PaddlePaddle训练一个GAN模型。
 
@@ -34,7 +35,7 @@ $$\min_G\max_D \text{Loss} = \min_G\max_D \frac{1}{m}\sum_{i=1}^m[\log D(x^i) + 
 
 训练时，生成器和分类器会轮流通过随机梯度下降算法更新参数。生成器的目标函数是让自己产生的样本被分类器分类为真，而分类器的目标函数则是正确的区分真伪样本。当对抗式生成模型训练收敛到平衡态的时候，生成器会把输入的噪音分布转化成真的样本数据分布，而分类器则完全无法分辨真伪图片。
 
-在最早的对抗式生成网络的论文中，生成器和分类器用的都是全联接层，所以没有办法很好的生成图片数据，也没有办法做的很深。所以在随后的论文中，人们提出了深度卷积对抗式生成网络（deep convolutional generative adversarial network or DCGAN）\[[2](#参考文献)\]。在DCGAN中，生成器 G 是由多个卷积转置层（transposed convolution）组成的，这样可以用更少的参数来生成质量更高的图片。具体网络结果可参见图3。
+在最早的对抗式生成网络的论文中，生成器和分类器用的都是全联接层，所以没有办法很好的生成图片数据，也没有办法做的很深。所以在随后的论文中，人们提出了深度卷积对抗式生成网络 Deep Convolutional Generative Adversarial Network, [DCGAN][dcgan]。在DCGAN中，生成器 G 是由多个卷积转置层（transposed convolution）组成的，这样可以用更少的参数来生成质量更高的图片。具体网络结果可参见图3。
 
 <p align="center">
     <img src="./dcgan.png" width="700" height="300"><br/>
@@ -44,7 +45,7 @@ $$\min_G\max_D \text{Loss} = \min_G\max_D \frac{1}{m}\sum_{i=1}^m[\log D(x^i) + 
 
 
 ## 数据准备
-	
+
 ### 数据介绍与下载
 这章会用到两种数据，一种是简单的人造数据，一种是图片。
 
@@ -175,7 +176,7 @@ settings(
     learning_method=AdamOptimizer(beta1=0.5))
 
 ```
-	
+
 ##训练模型
 用MNIST手写数字图片训练对抗式生成网络可以用如下的命令：
 
@@ -204,6 +205,9 @@ fake_samples = get_fake_samples(generator_machine, batch_size, noise)
 
 
 ## 参考文献
-1. Goodfellow I, Pouget-Abadie J, Mirza M, et al. [Generative adversarial nets](https://arxiv.org/pdf/1406.2661v1.pdf)[C] Advances in Neural Information Processing Systems. 2014
-2. Radford A, Metz L, Chintala S. [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks](https://arxiv.org/pdf/1511.06434v2.pdf)[C] arXiv preprint arXiv:1511.06434. 2015
-3. Kingma D.P. and Welling M. [Auto-encoding variational bayes](https://arxiv.org/pdf/1312.6114v10.pdf)[C] arXiv preprint arXiv:1312.6114. 2013
+
+[gan]: https://arxiv.org/pdf/1406.2661v1.pdf "Goodfellow I, Pouget-Abadie J, Mirza M, et al. Generative adversarial nets.  Advances in Neural Information Processing Systems. 2014"
+
+[dcgan]: https://arxiv.org/pdf/1511.06434v2.pdf "Radford A, Metz L, Chintala S. Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks arXiv preprint arXiv:1511.06434. 2015"
+
+[va]: https://arxiv.org/pdf/1312.6114v10.pdf "Kingma D.P. and Welling M. Auto-encoding variational bayes arXiv preprint arXiv:1312.6114. 2013"
