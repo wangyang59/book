@@ -208,6 +208,6 @@ fake_samples = get_fake_samples(generator_machine, batch_size, noise)
 
 [gan]: https://arxiv.org/pdf/1406.2661v1.pdf "Goodfellow I, Pouget-Abadie J, Mirza M, et al. Generative adversarial nets.  Advances in Neural Information Processing Systems. 2014"
 
-[dcgan]: Radford A, Metz L, Chintala S. [Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks](https://arxiv.org/pdf/1511.06434v2.pdf)[C] arXiv preprint arXiv:1511.06434. 2015
+[dcgan]: https://arxiv.org/pdf/1511.06434v2.pdf "Radford A, Metz L, Chintala S. Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks arXiv preprint arXiv:1511.06434. 2015"
 
-[va]: Kingma D.P. and Welling M. [Auto-encoding variational bayes](https://arxiv.org/pdf/1312.6114v10.pdf)[C] arXiv preprint arXiv:1312.6114. 2013
+[va]: https://arxiv.org/pdf/1312.6114v10.pdf "Kingma D.P. and Welling M. Auto-encoding variational bayes arXiv preprint arXiv:1312.6114. 2013"
